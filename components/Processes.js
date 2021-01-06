@@ -35,7 +35,7 @@ class Processes extends React.Component{
    
   
     
-    console.log(this.state.Token)
+  
    
     const fetch= async()=>{
        await  getToken();
@@ -53,9 +53,10 @@ class Processes extends React.Component{
 
    fetch()
     
-
+  console.log(this.state.Token)
    
   }
+   
 
    render() {
        var that = this; 
@@ -73,7 +74,7 @@ return (
         return  <Button
                     buttonStyle={{ margin: 10, marginTop: 50, height: 100 }}
                     title={object.Nome}
-                    onPress={()=> that.props.navigation.navigate('Selecione') } key={i}
+                    onPress={()=> that.props.navigation.navigate('Selecione', {idProc: object.ID}) } key={i}
                 />
     })}
                

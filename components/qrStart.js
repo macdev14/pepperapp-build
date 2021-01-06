@@ -1,16 +1,41 @@
-import { Platform, StyleSheet, Text, View } from 'react-native';
+import { Modal, Platform, StyleSheet, Text, View } from 'react-native';
 import React, { useEffect, useState, useContext } from 'react';
 import { BarCodeScanner } from 'expo-barcode-scanner';
-export default function qrStart() {
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import api from './api';
+import {
+    Input,
+    Card,
+    FormValidationMessage,
+    Button
+} from 'react-native-elements';
+
+
+export default function qrStart({ route, navigation }) {
 
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
-
+  const [modalVisible, setmodalVisible] = useState(false)
+  const [Token, setToken] = useState('');
+  const { idProc } = route.params;
+  console.log(idProc)
    useEffect(() => {
+
+    const getToken = async () =>{
+       const tok = await AsyncStorage.getItem('token');
+       if (tok !== null) {
+    return setToken(tok)
+    }
+    return this.props.navigation.navigate('Login');
+    }
+   
     (async () => {
+      await getToken();
+      console.log(Token)
       if (Platform.OS === 'web') {
         setHasPermission(true);
       } else {
+        
         const { status } = await BarCodeScanner.requestPermissionsAsync();
         setHasPermission(status === 'granted');
       }
@@ -19,23 +44,46 @@ export default function qrStart() {
   
  const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
-    alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+    var options = { hour12: false };
+    let curTime = new Date().toLocaleTimeString('pt-BR', options)
+    console.log(curTime);
+    console.log(Token)
+    let id = data.replace(/[^0-9]/g,"");
+    if (isNaN(parseInt(id))){
+      alert('O.S inválida!')
+    }else{
+    return (api.post('api/processos/inicio', { osid: id, idProc: idProc, horario: curTime}, { headers: { 'Authorization':  `${Token}` } } ).then((res)=>{
+         
+           return alert(res.data)
+              
+           }
+       ).catch((err)=>{ return alert(err) }))
+  };
   };
 
   if (hasPermission === null) {
-    return <Text>Requesting for camera permission</Text>;
+    return   <Text>No access to camera</Text>
   }
   if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
+    return   <Text>No access to camera</Text>
   }
+
+
+
 
   return (
     <View style={styles.container}>
+   
+     
+
+    
       <BarCodeScanner
         onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
         style={StyleSheet.absoluteFillObject}
       />
-      {scanned && <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
+       {scanned && <Button title={'Escanear Novamente'} onPress={() => setScanned(false)} />}
+ 
+    
     </View>
   );
 }

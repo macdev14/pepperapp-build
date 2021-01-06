@@ -18,7 +18,7 @@ export default class Time extends React.Component{
      constructor(props) {
    
     super(props);
-    this.state = { isLoading: false, Token:'', Processes:'' };
+    this.state = { isLoading: false, Token:'', idProc: this.props.route.params.idProc };
   //  this.props = this.props.bind(this);
  //   this.setState = this.setState.bind(this);
   };
@@ -45,13 +45,13 @@ componentDidMount(){
       <Button
                     buttonStyle={{ margin: 10, marginTop: 50, height: 100 }}
                     title={'Inicio'}
-                    onPress={()=> that.props.navigation.navigate('Início') } 
+                    onPress={()=> that.props.navigation.navigate('Início', { idProc: that.state.idProc}) } 
                 />
                
       <Button
                     buttonStyle={{ margin: 10, marginTop: 50, height: 100 }}
                     title={'Fim'}
-                    onPress={()=> that.props.navigation.navigate('Fim') }
+                    onPress={()=> that.props.navigation.navigate('Fim', { idProc: that.state.idProc}) }
                 />
                
                
