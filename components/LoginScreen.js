@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import React, { useEffect, useState, useContext } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import api from './api';
@@ -30,7 +30,7 @@ const SignInScreen = ({ navigation }) => {
                AsyncStorage.setItem('token', res.data.token);
                navigation.navigate('Processes');
            }
-       ).catch((err)=>{AsyncStorage.removeItem('token');navigation.navigate('Login'); }))
+       ).catch((err)=>{AsyncStorage.removeItem('token'); setSignUpErrors({password: 'Senha Incorreta', username: 'Usuário incorreto'}) }))
     }
 
     const handleSignIn = () => {
@@ -67,17 +67,22 @@ const SignInScreen = ({ navigation }) => {
 
     return (
         <View>
-            <Card>
+         <Text style={{height:30, margin:50, fontSize:30, marginLeft:40, color: '#000'}}> Pimentel Ferramentas</Text>
+            <Card borderRadius={10}>
                 <Input
-                    label={'Usuário'}
+                    label={''}
+                    inputStyle={{height:10, fontSize:30,}}
+                    inputContainerStyle={{height:50, margin:30}}
                     placeholder="Usuário"
                     value={user}
                     onChangeText={ setUser }
                     errorStyle={{ color: 'red' }}
-                    errorMessage={SignUpErrors ? SignUpErrors.email : null}
+                    errorMessage={SignUpErrors ? SignUpErrors.username : null}
                 />
                 <Input
                     placeholder="Senha"
+                    inputStyle={{height:10, fontSize:30,}}
+                    inputContainerStyle={{height:50, margin:30}}
                     value={password}
                     onChangeText={ setPassword }
                     secureTextEntry
@@ -85,7 +90,8 @@ const SignInScreen = ({ navigation }) => {
                     errorMessage={SignUpErrors ? SignUpErrors.password : null}
                 />
                 <Button
-                    buttonStyle={{ margin: 10, marginTop: 50 }}
+                    buttonStyle={{ margin: 10, marginTop: 50, height: 100,borderRadius: 10, backgroundColor:'#9e9e9e'  }}
+                    color="#808080"
                     title="Entrar"
                     onPress={() =>  {signIn()}  }
                 />
