@@ -90,7 +90,7 @@ const SignInScreen = ({ navigation }) => {
                     errorMessage={SignUpErrors ? SignUpErrors.password : null}
                 />
                 <Button
-                    buttonStyle={{ margin: 10, marginTop: 50, height: 100,borderRadius: 10, backgroundColor:'#9e9e9e'  }}
+                    buttonStyle={{ margin: 10, marginTop: 50, height: 100,borderRadius: 10, backgroundColor:'#000000'  }}
                     color="#808080"
                     title="Entrar"
                     onPress={() =>  {signIn()}  }

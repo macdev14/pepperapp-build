@@ -23,8 +23,12 @@ export default function App() {
       }, cardStyle: {
                 backgroundColor: '#e0e0e0'
             } }}/>
-        <Stack.Screen name='Início' component={qrStart} />
-         <Stack.Screen name='Fim' component={qrEnd} options={{title: 'Fim do Processo',  headerTintColor: '#fff',headerStyle: {
+        <Stack.Screen name='Início' component={qrStart} options={{title: 'Início',  headerTintColor: '#fff',headerStyle: {
+         backgroundColor: '#000'
+      }, cardStyle: {
+                backgroundColor: '#e0e0e0'
+            } }} />
+         <Stack.Screen name='Fim' component={qrEnd} options={{title: 'Fim',  headerTintColor: '#fff',headerStyle: {
          backgroundColor: '#000'
       }, cardStyle: {
                 backgroundColor: '#e0e0e0'
