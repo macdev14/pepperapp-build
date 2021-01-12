@@ -81,7 +81,11 @@ export default function qrStart({ route, navigation }) {
         onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
         style={StyleSheet.absoluteFillObject}
       />
- 
+     <View style={{width: 500, height: 650}}>
+        <Button title={'Processos'}  buttonStyle={{marginTop:490,marginBottom:10, backgroundColor: '#000000', height: 130, width: 500, fontSize:50, borderWidth: 0.5,borderColor: 'black', borderRadius:20}} onPress={() => navigation.navigate('Processes') } />
+       
+       
+      </View>
     
     </View>
   );
