@@ -25,7 +25,7 @@ export default function App() {
                 backgroundColor: '#e0e0e0'
             } }}/>
         
-        <Stack.Screen name='Qtd' component={Qtd} options={{title: 'Quantidade', headerLeft:null,  headerTintColor: '#fff',headerStyle: {
+        <Stack.Screen name='Qtd' component={Qtd} options={{title: 'Quantidade', headerTintColor: '#fff',headerStyle: {
          backgroundColor: '#000'
       }, cardStyle: {
                 backgroundColor: '#e0e0e0'
