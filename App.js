@@ -8,6 +8,7 @@ import qrStart from "./components/qrStart";
 import qrEnd from "./components/qrEnd";
 import SignInScreen from './components/LoginScreen'
 import Processes from "./components/Processes"
+import Qtd from "./components/Qtd";
 import Time from "./components/Time"
 const Stack = createStackNavigator();
 const customDynamicTextColor = DynamicColorIOS({
@@ -23,6 +24,13 @@ export default function App() {
       }, cardStyle: {
                 backgroundColor: '#e0e0e0'
             } }}/>
+        
+        <Stack.Screen name='Qtd' component={Qtd} options={{title: 'Quantidade', headerLeft:null,  headerTintColor: '#fff',headerStyle: {
+         backgroundColor: '#000'
+      }, cardStyle: {
+                backgroundColor: '#e0e0e0'
+            } }}/>
+
         <Stack.Screen name='Início' component={qrStart} options={{title: 'Início',  headerTintColor: '#fff',headerStyle: {
          backgroundColor: '#000'
       }, cardStyle: {

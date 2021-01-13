@@ -44,6 +44,7 @@ export default function qrStart({ route, navigation }) {
   
  const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
+    
     var options = { hour12: false };
     let curTime = new Date().toLocaleTimeString('pt-BR', options)
     console.log(curTime);
@@ -52,12 +53,13 @@ export default function qrStart({ route, navigation }) {
     if (isNaN(parseInt(id))){
       alert('O.S inválida!')
     }else{
-    return (api.post('api/processos/inicio', { osid: id, idProc: idProc, horario: curTime}, { headers: { 'Authorization':  `${Token}` } } ).then((res)=>{
+    return navigation.navigate('Qtd', {idProc: idProc, osid: id}) 
+   /* return (api.post('api/processos/inicio', { osid: id, idProc: idProc, horario: curTime}, { headers: { 'Authorization':  `${Token}` } } ).then((res)=>{
          
            return alert(res.data)
               
            }
-       ).catch((err)=>{ return alert(err) }))
+       ).catch((err)=>{ return alert(err) }))*/
   };
   };
 

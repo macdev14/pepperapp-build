@@ -81,7 +81,7 @@ const SignInScreen = ({ navigation }) => {
                 />
                 <Input
                     placeholder="Senha"
-                    inputStyle={{height:10, fontSize:30,}}
+                    inputStyle={{height:10, fontSize:30}}
                     inputContainerStyle={{height:50, margin:30}}
                     value={password}
                     onChangeText={ setPassword }
