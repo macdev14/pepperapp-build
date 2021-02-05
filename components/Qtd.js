@@ -105,7 +105,7 @@ useEffect(() => {
 
     return (
         <View>
-         <Text style={{height:30,fontSize:30, textAlign:'center', color: '#000', marginBottom:30, marginTop:30}}> Quantidade </Text>
+         <Text style={{height:30,fontSize:30, textAlign:'center', color: '#000000', marginBottom:30, marginTop:30}}> Quantidade </Text>
             <Card borderRadius={10}>
                 <TextInput 
                     label={'Quantidade'}

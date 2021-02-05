@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { PropTypes } from 'react'
-import {ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import {ActivityIndicator, StyleSheet, Text, View,  SafeAreaView, ScrollView  } from 'react-native';
+import Constants from 'expo-constants';
 import React, { useEffect, useState, useContext } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import api from './api';
@@ -37,7 +38,7 @@ class Processes extends React.Component{
     
   
    
-    const fetch= async()=>{
+    const fetch = async()=>{
        await  getToken();
        const allproc = await api.get('api/processos', { headers: { 'Authorization':  `${this.state.Token}` }} ) .then(responseJson => {
         this.setState(
@@ -68,11 +69,15 @@ class Processes extends React.Component{
       );
     }
 return (
-       <View>
+  <SafeAreaView style={styles.container}>
+    
+     
+       <ScrollView style={styles.scrollView}  showsVerticalScrollIndicator ={false}
+  showsHorizontalScrollIndicator={false}>
             <Card titleStyle={{height: 200}} >
                 {that.state.Processes.map(function(object, i){
         return  <Button
-                    buttonStyle={{ margin: 10, marginTop: 50, height: 100 }}
+                    buttonStyle={{ margin: 10, marginTop: 50, height: 100, backgroundColor: '#000000'}}
                     title={object.Nome}
                     onPress={()=> that.props.navigation.navigate('Selecione', {idProc: object.ID}) } key={i}
                 />
@@ -80,12 +85,28 @@ return (
                
                
             </Card>
-        </View>
+       
+       </ScrollView>
+    </SafeAreaView>
 )
   }
 
   
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    marginTop: Constants.statusBarHeight,
+  },
+  scrollView: {
+    
+   
+  },
+  text: {
+    fontSize: 42,
+  },
+});
 
 
 

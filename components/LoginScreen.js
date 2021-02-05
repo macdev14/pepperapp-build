@@ -76,7 +76,7 @@ const SignInScreen = ({ navigation }) => {
                     placeholder="Usuário"
                     value={user}
                     onChangeText={ setUser }
-                    errorStyle={{ color: 'red' }}
+                    errorStyle={{ color: '#DC143C' }}
                     errorMessage={SignUpErrors ? SignUpErrors.username : null}
                 />
                 <Input
@@ -86,7 +86,7 @@ const SignInScreen = ({ navigation }) => {
                     value={password}
                     onChangeText={ setPassword }
                     secureTextEntry
-                    errorStyle={{ color: 'red' }}
+                    errorStyle={{ color: '#DC143C' }}
                     errorMessage={SignUpErrors ? SignUpErrors.password : null}
                 />
                 <Button
