@@ -11,10 +11,7 @@ import Processes from "./components/Processes"
 import Qtd from "./components/Qtd";
 import Time from "./components/Time"
 const Stack = createStackNavigator();
-const customDynamicTextColor = DynamicColorIOS({
-  dark: '#000',
-  light: '#fff'
-});
+
 export default function App() {
   return (
     <NavigationContainer>

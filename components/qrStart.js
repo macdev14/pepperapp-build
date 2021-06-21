@@ -18,7 +18,7 @@ export default function qrStart({ route, navigation }) {
   const [modalVisible, setmodalVisible] = useState(false)
   const [Token, setToken] = useState('');
   const { idProc } = route.params;
-  console.log(idProc)
+  //console.log(idProc)
    useEffect(() => {
 
     const getToken = async () =>{
@@ -31,7 +31,7 @@ export default function qrStart({ route, navigation }) {
    
     (async () => {
       await getToken();
-      console.log(Token)
+      //console.log(Token)
       if (Platform.OS === 'web') {
         setHasPermission(true);
       } else {
@@ -47,20 +47,27 @@ export default function qrStart({ route, navigation }) {
     
     var options = { hour12: false };
     let curTime = new Date().toLocaleTimeString('pt-BR', options)
-    console.log(curTime);
-    console.log(Token)
-    let id = data.replace(/[^0-9]/g,"");
-    if (isNaN(parseInt(id))){
-      alert('O.S inválida!')
-    }else{
-    return navigation.navigate('Qtd', {idProc: idProc, osid: id}) 
+    //console.log(curTime);
+    //console.log(Token)
+    //console.log(data)
+    let id = data
+     if (id.includes('http') && id.includes('.com')) {
+ return navigation.navigate('Qtd', {idProc: idProc, osid: id, timeType: 'inicio'})
+ }
+      
+      else{
+      return alert('Ordem de Serviço inválida')
+       }  
+
+    //console.log("wait...")
+    //console.log(id)
+   
    /* return (api.post('api/processos/inicio', { osid: id, idProc: idProc, horario: curTime}, { headers: { 'Authorization':  `${Token}` } } ).then((res)=>{
          
            return alert(res.data)
               
            }
        ).catch((err)=>{ return alert(err) }))*/
-  };
   };
 
   if (hasPermission === null) {
@@ -74,27 +81,27 @@ export default function qrStart({ route, navigation }) {
 
 
   return (
+    <>
     <View style={styles.container}>
-   
-     
-
-    
       <BarCodeScanner
         onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-        style={StyleSheet.absoluteFillObject}
+        style={styles.qr}
       />
        {scanned && <Button title={'Escanear Novamente'}  buttonStyle={{backgroundColor: '#000000', height: 130, width: 500}} onPress={() => setScanned(false)} />}
-       <View style={{width: 500, height: 650}}>
-        <Button title={'Processos'}  buttonStyle={{marginTop:490,marginBottom:10, backgroundColor: '#000000', height: 130, width: 500, fontSize:50, borderWidth: 0.5,borderColor: '#000000', borderRadius:20}} onPress={() => navigation.navigate('Processes') } />
        
        
-      </View>
+      
     </View>
+     <View style={styles.bottombar}>
+        <Button title={'Processos'}  buttonStyle={styles.button} onPress={() => navigation.navigate('Processes') } />    
+      </View>
+      </>
   );
 }
 
 
  /* return (
+   
     <View style={styles.container}>
       <Text>Open up App.js to start working on your app!</Text>
       <StatusBar style="auto" />
@@ -104,9 +111,41 @@ export default function qrStart({ route, navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flex: 2,
+    backgroundColor: '#000',
+    width: '100%',
+    bottom : 0,
+    padding:0
   },
+  qr:
+  {"bottom": 0, 
+  "left": 0, 
+  "position": "absolute", 
+  "padding" : 0,
+  "right": 0,
+  "top": 0,
+  "width":'100%'
+  },
+  button: {
+    marginTop:0,
+    marginBottom:0, 
+    backgroundColor: '#000000', 
+    height: 130, 
+    width: '100%', 
+    fontSize:50,
+   
+    borderColor: '#000000', 
+    
+    top:0
+  },
+  bottombar:{
+    width: '100%',
+    backgroundColor: '#000',
+    justifyContent: 'space-between',
+    height:130,
+    bottom : 10,
+    top:0,
+    padding:0
+
+  }
 });

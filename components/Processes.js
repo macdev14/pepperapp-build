@@ -4,6 +4,9 @@ import {ActivityIndicator, StyleSheet, Text, View,  SafeAreaView, ScrollView  } 
 import Constants from 'expo-constants';
 import React, { useEffect, useState, useContext } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import api from './api';
 import {
     Input,
@@ -22,15 +25,18 @@ class Processes extends React.Component{
   //  this.props = this.props.bind(this);
  //   this.setState = this.setState.bind(this);
   };
-   
+  Drawer = createDrawerNavigator(); 
   componentDidMount() {
     
     const getToken = async () =>{
        const tok = await AsyncStorage.getItem('token');
-       if (tok !== null) {
-    return  this.setState({ Token: tok })
-    }
+      
+       if (tok) {
+    return this.setState({ Token: tok })
+    }else{
+    AsyncStorage.removeItem('token');
     return this.props.navigation.navigate('Login');
+    }
    }
   
    
@@ -40,7 +46,10 @@ class Processes extends React.Component{
    
     const fetch = async()=>{
        await  getToken();
-       const allproc = await api.get('api/processos', { headers: { 'Authorization':  `${this.state.Token}` }} ) .then(responseJson => {
+       let token  = this.state.Token
+       //console.log(token)
+       const allproc = await api.get('api/processos/', { headers: { 'Authorization':  'Bearer ' + token } } ) .then(responseJson => {
+        if (responseJson.messages){throw "Sessão Expirada"}
         this.setState(
           {
             isLoading: false,
@@ -48,18 +57,23 @@ class Processes extends React.Component{
           },
           function() {}
         );
-      }).catch(err => {return this.props.navigation.navigate('Login')});
+      }).catch(err => {
+        console.log(err, err.response)
+        AsyncStorage.removeItem('token');
+        return this.props.navigation.navigate('Login')
+        });
    
    }
 
    fetch()
     
-  console.log(this.state.Token)
+  //console.log(this.state.Token)
    
   }
    
 
    render() {
+     
        var that = this; 
         if (that.state.isLoading) {
       return (
@@ -72,14 +86,14 @@ return (
   <SafeAreaView style={styles.container}>
     
      
-       <ScrollView style={styles.scrollView}  showsVerticalScrollIndicator ={false}
+       <ScrollView style={StyleSheet.absoluteFill}  showsVerticalScrollIndicator ={false}
   showsHorizontalScrollIndicator={false}>
             <Card titleStyle={{height: 200}} >
                 {that.state.Processes.map(function(object, i){
         return  <Button
-                    buttonStyle={{ margin: 10, marginTop: 50, height: 100, backgroundColor: '#000000'}}
-                    title={object.Nome}
-                    onPress={()=> that.props.navigation.navigate('Selecione', {idProc: object.ID}) } key={i}
+                    buttonStyle={{ margin: 10, marginTop: 50, marginBottom:50,height: 100, backgroundColor: '#000000'}}
+                    title={object.procname}
+                    onPress={()=>  that.props.navigation.navigate('Selecione', {idProc: object.id, nome: object.procname}) } key={i}
                 />
     })}
                
@@ -96,11 +110,11 @@ return (
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    marginTop: Constants.statusBarHeight,
+    flex: 2,
+    marginTop:0,
   },
   scrollView: {
-    
+   
    
   },
   text: {

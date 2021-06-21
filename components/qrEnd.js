@@ -17,8 +17,8 @@ export default function qrStart({ route, navigation }) {
   const [scanned, setScanned] = useState(false);
   const [modalVisible, setmodalVisible] = useState(false)
   const [Token, setToken] = useState('');
+  //const [ocorrencia, setOcorrencia]
   const { idProc } = route.params;
-  console.log(idProc)
    useEffect(() => {
 
     const getToken = async () =>{
@@ -31,7 +31,7 @@ export default function qrStart({ route, navigation }) {
    
     (async () => {
       await getToken();
-      console.log(Token)
+     
       if (Platform.OS === 'web') {
         setHasPermission(true);
       } else {
@@ -46,19 +46,18 @@ export default function qrStart({ route, navigation }) {
     setScanned(true);
     var options = { hour12: false };
     let curTime = new Date().toLocaleTimeString('pt-BR', options)
-    console.log(curTime);
-    console.log(Token)
-    let id = data.replace(/[^0-9]/g,"");
-    if (isNaN(parseInt(id))){
-      alert('O.S inválida!')
-    }else{
-    return (api.post('api/processos/fim', { osid: id, idProc: idProc, horario: curTime}, { headers: { 'Authorization':  `${Token}` } } ).then((res)=>{
+    let id = data;
+    
+    (data.includes('http') && data.includes('.com')) ? (navigation.navigate('Qtd', {idProc: idProc, osid: id, timeType: 'fim'}))  : (alert('Ordem de Serviço inválida'))
+      
+    /*(api.post('api/processos/fim', { osid: [{url : id}] , idProc: idProc, horario: curTime, ocorrencias : ocorrencia}, { headers: { 'Authorization':  `${Token}` } } ).then((res)=>{
          
-           return alert('Processo finalizado!')
+          alert(res.data);
+           navigation.navigate('Processes');
               
            }
-       ).catch((err)=>{ return alert(err) }))
-  };
+       ).catch((err)=>{ return alert(err) }))*/
+  
   };
 
   if (hasPermission === null) {
@@ -72,6 +71,7 @@ export default function qrStart({ route, navigation }) {
 
 
   return (
+    <>
     <View style={styles.container}>
    
      
@@ -81,13 +81,15 @@ export default function qrStart({ route, navigation }) {
         onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
         style={StyleSheet.absoluteFillObject}
       />
-     <View style={{width: 500, height: 650}}>
-        <Button title={'Processos'}  buttonStyle={{marginTop:490,marginBottom:10, backgroundColor: '#000000', height: 130, width: 500, fontSize:50, borderWidth: 0.5,borderColor: '#000000', borderRadius:20}} onPress={() => navigation.navigate('Processes') } />
+    
+    
+    </View>
+     <View style={styles.bottombar}>
+        <Button title={'Processos'}  buttonStyle={styles.button} onPress={() => navigation.navigate('Processes') } />
        
        
       </View>
-    
-    </View>
+      </>
   );
 }
 
@@ -101,10 +103,29 @@ export default function qrStart({ route, navigation }) {
 }*/
 
 const styles = StyleSheet.create({
+   bottombar:{
+    width: '100%',
+    backgroundColor: '#000',
+    justifyContent: 'space-between',
+    height:130,
+    bottom : 10,
+    top:0,
+    padding:0
+
+  },
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#000',
     alignItems: 'center',
     justifyContent: 'center',
   },
+  button: {
+   
+    
+    backgroundColor: '#000000', 
+    height: 130, 
+    width: '100%', 
+    fontSize:50, 
+  
+    }
 });

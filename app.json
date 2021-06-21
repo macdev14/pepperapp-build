@@ -20,7 +20,16 @@
       "bundleIdentifier": "com.macdev.pepper-app"
     },
     "android": {
-      "package": "com.macdev.pepperapp"
+      "package": "com.macdev.pepperapp",
+      "splash": {
+        "resizeMode": "cover",
+        "mdpi": "./assets/splash.png",
+        "hdpi": "./assets/splash.png",
+        "xhdpi": "./assets/splash.png",
+        "xxhdpi": "./assets/splash.png",
+        "xxxhdpi": "./assets/splash.png",
+        "backgroundColor": "#ffffff"
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
