@@ -1,10 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 import { PropTypes } from 'react'
-import {ActivityIndicator, StyleSheet, Text, View, Dimensions } from 'react-native';
+import {ActivityIndicator, StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState, useContext } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Constants from 'expo-constants';
+import { Ionicons } from '@expo/vector-icons';
 import api from './api';
+import UserContext from './Context'
 import {
     Input,
     Card,
@@ -15,7 +17,7 @@ import {
 
 
 export default class Time extends React.Component{
-   
+    static contextType = UserContext  
      constructor(props) {
    
     super(props);
@@ -32,7 +34,7 @@ componentDidMount(){
     return  this.setState({ Token: tok })
     }
     AsyncStorage.removeItem('token');
-    return this.props.navigation.navigate('Login');
+    //return this.props.navigation.navigate('Login');
    }
 
 
@@ -40,7 +42,7 @@ componentDidMount(){
 }
     logout(){
          AsyncStorage.removeItem('token');
-         return this.props.navigation.navigate('Login');
+         //return this.props.navigation.navigate('Login');
     }
     render(){
         var that = this;
@@ -62,13 +64,26 @@ componentDidMount(){
                
                
             </Card>
-           <View style={styles.container}>
-              <Button
-                    buttonStyle={{ margin: 10, marginTop: 50, height: 50, width:50, marginBottom:10 ,backgroundColor: '#ff0000' }}
+
+            <View style={styles.back}>
+             
+           
+            <TouchableOpacity onPress={()=> that.props.navigation.navigate('Processes') } style={styles.button}>
+            <Text style={{marginLeft:10, color:"#fff", marginTop:5 }} >Voltar</Text>
+            <Ionicons name="arrow-back" size={54} color="white" />
+            
+             
+         
+                
+                 </TouchableOpacity>
+                 <Button
+                    buttonStyle={{ marginTop: 50, height: 50, width:55, marginBottom:0 ,backgroundColor: '#ff0000' }}
                     title={'Sair'}
-                    onPress={()=> this.logout() }
+                    onPress={()=> that.context.signOut() }
                 />
            </View>
+
+         
         </View>)
     }
     
@@ -81,6 +96,28 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       width:100,
       height:50,
-      marginTop: 100, 
+      marginTop: 50, 
     
-    }})
+    },
+    back: {
+        paddingLeft:20,
+        justifyContent: 'flex-start',
+        alignItems: 'flex-start',
+        width:150,
+        height:150,
+        marginTop: 20, 
+     
+      
+      },
+    button:{
+       
+        justifyContent: 'flex-start',
+        alignItems: 'flex-start',
+        height: 80, 
+        width:100, 
+        marginBottom:0,
+        backgroundColor: '#ffa000',
+        borderRadius: 5
+    },
+
+})

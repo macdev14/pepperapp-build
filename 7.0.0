@@ -1,0 +1,39 @@
+yarn add v1.22.4
+[1/4] Resolving packages...
+[2/4] Fetching packages...
+info @expo/traveling-fastlane-linux@1.15.1: The platform "darwin" is incompatible with this module.
+info "@expo/traveling-fastlane-linux@1.15.1" is an optional dependency and failed compatibility check. Excluding it from installation.
+info @expo/ngrok-bin-darwin-ia32@2.2.8: The CPU architecture "x64" is incompatible with this module.
+info "@expo/ngrok-bin-darwin-ia32@2.2.8" is an optional dependency and failed compatibility check. Excluding it from installation.
+info @expo/ngrok-bin-freebsd-ia32@2.2.8: The platform "darwin" is incompatible with this module.
+info "@expo/ngrok-bin-freebsd-ia32@2.2.8" is an optional dependency and failed compatibility check. Excluding it from installation.
+info @expo/ngrok-bin-freebsd-ia32@2.2.8: The CPU architecture "x64" is incompatible with this module.
+info @expo/ngrok-bin-freebsd-x64@2.2.8: The platform "darwin" is incompatible with this module.
+info "@expo/ngrok-bin-freebsd-x64@2.2.8" is an optional dependency and failed compatibility check. Excluding it from installation.
+info @expo/ngrok-bin-linux-arm@2.2.8: The platform "darwin" is incompatible with this module.
+info "@expo/ngrok-bin-linux-arm@2.2.8" is an optional dependency and failed compatibility check. Excluding it from installation.
+info @expo/ngrok-bin-linux-arm@2.2.8: The CPU architecture "x64" is incompatible with this module.
+info @expo/ngrok-bin-linux-arm64@2.2.8: The platform "darwin" is incompatible with this module.
+info "@expo/ngrok-bin-linux-arm64@2.2.8" is an optional dependency and failed compatibility check. Excluding it from installation.
+info @expo/ngrok-bin-linux-arm64@2.2.8: The CPU architecture "x64" is incompatible with this module.
+info @expo/ngrok-bin-linux-ia32@2.2.8: The platform "darwin" is incompatible with this module.
+info "@expo/ngrok-bin-linux-ia32@2.2.8" is an optional dependency and failed compatibility check. Excluding it from installation.
+info @expo/ngrok-bin-linux-ia32@2.2.8: The CPU architecture "x64" is incompatible with this module.
+info @expo/ngrok-bin-linux-x64@2.2.8: The platform "darwin" is incompatible with this module.
+info "@expo/ngrok-bin-linux-x64@2.2.8" is an optional dependency and failed compatibility check. Excluding it from installation.
+info @expo/ngrok-bin-sunos-x64@2.2.8: The platform "darwin" is incompatible with this module.
+info "@expo/ngrok-bin-sunos-x64@2.2.8" is an optional dependency and failed compatibility check. Excluding it from installation.
+info @expo/ngrok-bin-win32-ia32@2.2.8-beta.1: The platform "darwin" is incompatible with this module.
+info "@expo/ngrok-bin-win32-ia32@2.2.8-beta.1" is an optional dependency and failed compatibility check. Excluding it from installation.
+info @expo/ngrok-bin-win32-ia32@2.2.8-beta.1: The CPU architecture "x64" is incompatible with this module.
+info @expo/ngrok-bin-win32-x64@2.2.8-beta.1: The platform "darwin" is incompatible with this module.
+info "@expo/ngrok-bin-win32-x64@2.2.8-beta.1" is an optional dependency and failed compatibility check. Excluding it from installation.
+[3/4] Linking dependencies...
+[4/4] Building fresh packages...
+success Saved lockfile.
+success Saved 1 new dependency.
+info Direct dependencies
+└─ react-native-vector-icons@8.0.0
+info All dependencies
+└─ react-native-vector-icons@8.0.0
+Done in 31.28s.

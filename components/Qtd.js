@@ -3,6 +3,7 @@ import {Alert, Image, StyleSheet, TextInput ,View,  SafeAreaView, ScrollView  } 
 import React, { useEffect, useState, useContext } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import api from './api';
+import UserContext from './Context'
 import {
     Input,
     Card,
@@ -15,31 +16,38 @@ import { Animated , Text} from 'react-native';
 
 
 const Qtd = ({ route, navigation }) => {
-
+    const context = useContext(UserContext)
     const { idProc, osid, timeType} = route.params;
     const [Token, setToken] = useState('');
     const [ocorrencia, setOcorrencia] = useState('')
     const [qtd, setQtd] = useState('');
-    
+    const [userId, setUserid] = useState()
     const [SignUpErrors, setSignUpErrors] = useState({});
 
 useEffect(() => {
+    
     (timeType == 'fim') ? (navigation.setOptions({ title: "Ocorrência" })) : (navigation.setOptions({ title: "Quantidade" }))  
     const getToken = async () =>{
-       const tok = await AsyncStorage.getItem('token');
+       let tok = await AsyncStorage.getItem('token');
        if (tok !== null) {
-    return setToken(tok)
+       tok =  JSON.parse(tok)
+       setUserid(tok['user_id']);
+       setToken(tok['token']);
+    return 
     }
     return navigation.navigate('Login');
     }
    
     (async () => {
       await getToken();
+      
+      
     })();
   }, []);
 
 
     function signIn(timeTypeOpt){
+      
         try {
           parseInt(qtd)
         } catch (error) {
@@ -48,8 +56,18 @@ useEffect(() => {
         ((qtd=='') && (timeTypeOpt == "inicio")) ? (alert('Alterar Quantidade')) : ( setQtd(parseInt(qtd)) );
         var options = { hour12: false };
         let curTime = new Date().toLocaleTimeString('pt-BR', options);
-        //console.log(curTime);
-        return (api.post('api/historico_os/',   { os: osid, processo: idProc, qtd: qtd, [timeTypeOpt]: curTime, ocorrencias: ocorrencia}, { headers: { 'Authorization':  `Bearer  ${Token}` } }  ).then((res)=>{
+        console.log("DATA START") 
+        console.log(osid);
+         console.log(idProc);
+         console.log(qtd);
+        console.log(curTime);
+        console.log(userId);
+        console.log("DATA END") 
+        const data =  { os: osid, processo: idProc, qtd: qtd, [timeTypeOpt]: curTime, ocorrencias: ocorrencia }
+        console.log(data);
+        const headers =  { headers: { 'Authorization':  `Bearer  ${Token}` } }
+        return (api.post('api/historico_os/',  data, headers  ).then((res)=>{
+               console.log(res.data)
                if (res.data.non_field_errors){
                  alert(res.data.non_field_errors)
                }
@@ -57,7 +75,7 @@ useEffect(() => {
                
                navigation.navigate('Processes');
            }
-       ).catch((err)=>{ alert(err.response.data.non_field_errors)//setSignUpErrors({ username: 'Erro ao cadastrar quantidade'}) 
+       ).catch((err)=>{  console.log(err);alert(err.response.data.non_field_errors)//setSignUpErrors({ username: 'Erro ao cadastrar quantidade'}) 
        }))
     }
 
@@ -80,37 +98,37 @@ useEffect(() => {
 );
     }
 
-    const handleSignIn = () => {
-        // https://indicative.adonisjs.com
-        const rules = {
-            user: 'required|string',
-            password: 'required|string|min:6|max:40'
-        };
+    // const handleSignIn = () => {
+    //     // https://indicative.adonisjs.com
+    //     const rules = {
+    //         user: 'required|string',
+    //         password: 'required|string|min:6|max:40'
+    //     };
 
-        const data = {
-            user: user,
-            password: password
-        };
+    //     const data = {
+    //         user: user,
+    //         password: password
+    //     };
 
-        const messages = {
-            required: field => `${field} is required`,
-            'username.alpha': 'Username contains unallowed characters',
-            'password.min': 'Wrong Password?'
-        };
+    //     const messages = {
+    //         required: field => `${field} is required`,
+    //         'username.alpha': 'Username contains unallowed characters',
+    //         'password.min': 'Wrong Password?'
+    //     };
 
-        validateAll(data, rules, messages)
-            .then(() => {
-                //console.log('success sign in');
-                signIn({ user, password });
-            })
-            .catch(err => {
-                const formatError = {};
-                err.forEach(err => {
-                    formatError[err.field] = err.message;
-                });
-                setSignUpErrors(formatError);
-            });
-    };
+    //     validateAll(data, rules, messages)
+    //         .then(() => {
+    //             //console.log('success sign in');
+    //             signIn({ user, password });
+    //         })
+    //         .catch(err => {
+    //             const formatError = {};
+    //             err.forEach(err => {
+    //                 formatError[err.field] = err.message;
+    //             });
+    //             setSignUpErrors(formatError);
+    //         });
+    // };
 
     return (
         <SafeAreaView style={styles.container}>

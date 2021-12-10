@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { PropTypes } from 'react'
-import {ActivityIndicator, StyleSheet, Text, View,  SafeAreaView, ScrollView  } from 'react-native';
+import {ActivityIndicator, StyleSheet, Text, View,  SafeAreaView, ScrollView , RefreshControl } from 'react-native';
 import Constants from 'expo-constants';
 import React, { useEffect, useState, useContext } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -8,6 +8,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import api from './api';
+import UserContext from './Context'
 import {
     Input,
     Card,
@@ -18,54 +19,73 @@ import {
 
 
 class Processes extends React.Component{
-     constructor(props) {
+  static contextType = UserContext
+
+  constructor(props) {
    
     super(props);
     this.state = { isLoading: true, Token:'', Processes:'' };
   //  this.props = this.props.bind(this);
  //   this.setState = this.setState.bind(this);
   };
+   
   Drawer = createDrawerNavigator(); 
   componentDidMount() {
-    
-    const getToken = async () =>{
-       const tok = await AsyncStorage.getItem('token');
+   
+  //   const getToken = async () =>{
+  //      const tok = await AsyncStorage.getItem('token');
       
-       if (tok) {
-    return this.setState({ Token: tok })
-    }else{
-    AsyncStorage.removeItem('token');
-    return this.props.navigation.navigate('Login');
-    }
-   }
+  //      if (tok) {
+  //   return this.setState({ Token: tok })
+  //   }else{
+  //   //AsyncStorage.removeItem('token');
+  //   //return this.props.navigation.navigate('Login');
+  //   this.context.signOut()
+  //   }
+  //  }
   
    
   
-    
-  
-   
-    const fetch = async()=>{
-       await  getToken();
-       let token  = this.state.Token
-       //console.log(token)
-       const allproc = await api.get('api/processos/', { headers: { 'Authorization':  'Bearer ' + token } } ) .then(responseJson => {
-        if (responseJson.messages){throw "Sessão Expirada"}
-        this.setState(
+    const refreshLogin = async() =>{
+      const token = await AsyncStorage.getItem('token') ?? this.context.signOut()
+      const tok = JSON.parse(token)
+      api.post('api/token/refresh/', { refresh : tok.refresh} ).then( (res) => {
+        const store = { 
+          token : res.data.access,
+          refresh : tok.refresh,
+          user_id : tok.user_id
+        }
+        //console.log("token refresh "+ tok.refresh )
+       //
+       api.get('api/processos/', { headers: { 'Authorization':  'Bearer ' + res.data.access } } ) .then(responseJson => {
+       // if (responseJson.messages){console.log(responseJson.messages); throw "Sessão Expirada"}
+        //console.log(responseJson.data)
+        return this.setState(
           {
             isLoading: false,
             Processes: responseJson.data,
+            Token: JSON.stringify(store)
           },
-          function() {}
+          //function() {}
         );
       }).catch(err => {
-        console.log(err, err.response)
-        AsyncStorage.removeItem('token');
-        return this.props.navigation.navigate('Login')
+        //console.log(err, err.response)
+        return this.context.signOut()
         });
-   
-   }
+      AsyncStorage.setItem('token', JSON.stringify(store));
+       
+      }  ).catch( (err) => {
+        //console.log(err); 
+         return this.context.signOut()} )
 
-   fetch()
+     
+
+    }
+  
+   
+    
+
+   refreshLogin()
     
   //console.log(this.state.Token)
    
@@ -87,6 +107,11 @@ return (
     
      
        <ScrollView style={StyleSheet.absoluteFill}  showsVerticalScrollIndicator ={false}
+       refreshControl={
+        <RefreshControl
+        
+          onRefresh={that.refreshLogin}
+        />}
   showsHorizontalScrollIndicator={false}>
             <Card titleStyle={{height: 200}} >
                 {that.state.Processes.map(function(object, i){

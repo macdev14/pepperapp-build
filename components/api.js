@@ -1,11 +1,12 @@
 import axios from "axios";
 
 // Pode ser algum servidor executando localmente: 
-// http://localhost:3000
+
 const api = axios.create({
-  baseURL: "https://peppertools.herokuapp.com",
-  headers: {'Content-Type': 'application/json'
-  }
+  //baseURL: "https://peppertools-test.herokuapp.com",
+  //baseURL: "http://localhost:8000",
+  baseURL: "http://127.0.0.1:8000",
+  headers: {'Content-Type': 'application/json'}
 });
 
 export default api;

@@ -3,6 +3,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import api from './api';
+import UserContext from './Context'
 import {
     Input,
     Card,
@@ -12,25 +13,29 @@ import {
 
 
 export default function qrStart({ route, navigation }) {
-
+  const context = useContext(UserContext)
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
   const [modalVisible, setmodalVisible] = useState(false)
   const [Token, setToken] = useState('');
+  const [userId, setUserId] = useState('')
   const { idProc } = route.params;
   //console.log(idProc)
    useEffect(() => {
 
-    const getToken = async () =>{
-       const tok = await AsyncStorage.getItem('token');
-       if (tok !== null) {
-    return setToken(tok)
-    }
-    return navigation.navigate('Login');
-    }
+    // const getToken = async () =>{
+    //    const tok = await AsyncStorage.getItem('token');
+    //    if (tok !== null) {
+    // return setToken(tok)
+    // }
+    // return context.SignOut();
+    // }
    
     (async () => {
-      await getToken();
+      const user_id = await context.retrieveIdFuncionario()
+      setUserId(user_id)
+      const token = await context.retrieveToken()
+      setToken(token)
       //console.log(Token)
       if (Platform.OS === 'web') {
         setHasPermission(true);
@@ -52,7 +57,7 @@ export default function qrStart({ route, navigation }) {
     //console.log(data)
     let id = data
      if (id.includes('http') && id.includes('.com')) {
- return navigation.navigate('Qtd', {idProc: idProc, osid: id, timeType: 'inicio'})
+ return navigation.navigate('Qtd', {idProc: idProc, osid: id, userID: userId, timeType: 'inicio'})
  }
       
       else{

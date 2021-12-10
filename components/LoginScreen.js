@@ -4,6 +4,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import Constants from 'expo-constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import api from './api';
+import UserContext from './Context';
 import {
     Input,
     Card,
@@ -13,85 +14,66 @@ import {
 
 
 
-
+/**
+ *
+ * @param expireInMinutes
+ * @returns {Date}
+ */
+ function getExpireDate(expireInMinutes) {
+    const now = new Date();
+    let expireTime = new Date(now);
+    expireTime.setMinutes(now.getMinutes() + expireInMinutes);
+    return expireTime;
+}
 
 const SignInScreen = ({ navigation }) => {
-
-    const url = 'http://localhost:8000/api/app/api/login';
+    const { LogIn } = React.useContext(UserContext);
+    //const url = 'http://localhost:8000/api/app/api/login';
     const [user, setUser] = useState('');
     const [password, setPassword] = useState('');
     const [SignUpErrors, setSignUpErrors] = useState({});
     
-  _retrieveToken = async () => {
-  try {
-    const value = await AsyncStorage.getItem('token');
-    if (value !== null ) {
-      //console.log(value);
-      navigation.reset({
-               index: 0,
-               routes: [{ name: 'Processes' }]
-})
-               navigation.navigate('Processes');
-    }
+//   _retrieveToken = async () => {
+//   try {
+//     const value = await AsyncStorage.getItem('token');
+//  //   if (value !== null ) {
+//       //console.log(value);
+// //       navigation.reset({
+// //                index: 0,
+// //                routes: [{ name: 'Processes' }]
+// // })
+// //                navigation.navigate('Processes');
+//  //  }
     
-        return;
+//         return;
     
-  } catch (error) {
-      return
-    // Error retrieving data
-  }
-};
-     _retrieveToken();
+//   } catch (error) {
+//       return
+//     // Error retrieving data
+//   }
+// };
+//      _retrieveToken();
 
     function signIn(){
        
        return (api.post('api/app/api/login', { username: user, password: password} ).then((res)=>{
-               if (res.data.token){
-               AsyncStorage.setItem('token', res.data.token);}
-               else if(res.data.access){
-               AsyncStorage.setItem('token', res.data.access);}
-               navigation.reset({
-               index: 0,
-               routes: [{ name: 'Processes' }]
-})
-               navigation.navigate('Processes');
+            console.log(res.data)  
+            if (res.data.access){
+                console.log("ID FUNCIONARIO: "+res.data.id_func)
+              
+                //setUserId(res.data.id_func)
+                console.log("token: "+ res.data.access)
+                return LogIn(res.data.access, res.data.id_func, res.data.refresh)
+            }
+            throw 'error'
            }
-       ).catch((err)=>{AsyncStorage.removeItem('token'); setSignUpErrors({password: 'Senha Incorreta', username: 'Usuário incorreto/ Sem internet'}) }))
+       ).catch((err)=>{console.log(err);AsyncStorage.removeItem('token'); setSignUpErrors({password: 'Senha Incorreta', username: 'Usuário incorreto/ Sem internet'}) }))
     }
 
    
 
-    const handleSignIn = () => {
-        // https://indicative.adonisjs.com
-        const rules = {
-            user: 'required|string',
-            password: 'required|string|min:6|max:40'
-        };
-
-        const data = {
-            user: user,
-            password: password
-        };
-
-        const messages = {
-            required: field => `${field} is required`,
-            'username.alpha': 'Username contains unallowed characters',
-            'password.min': 'Wrong Password?'
-        };
-
-        validateAll(data, rules, messages)
-            .then(() => {
-                //console.log('success sign in');
-                signIn({ user, password });
-            })
-            .catch(err => {
-                const formatError = {};
-                err.forEach(err => {
-                    formatError[err.field] = err.message;
-                });
-                setSignUpErrors(formatError);
-            });
-    };
+ 
+ 
 
     return (
 
@@ -106,8 +88,9 @@ const SignInScreen = ({ navigation }) => {
          <Text style={{height:50, margin:55, marginBottom:0 ,fontSize:20, marginTop:30, color: '#000'}}> Pimentel Ferramentas</Text>
             <Card borderRadius={10}>
                 <Input
+                    autoCapitalize="none"
                     label={''}
-                    inputStyle={{height:50, fontSize:30,}}
+                    inputStyle={{height:50, fontSize:20,}}
                     inputContainerStyle={{height:50, margin:30}}
                     placeholder="Usuário"
                     value={user}
@@ -117,7 +100,7 @@ const SignInScreen = ({ navigation }) => {
                 />
                 <Input
                     placeholder="Senha"
-                    inputStyle={{height:50, fontSize:30}}
+                    inputStyle={{height:50, fontSize:20}}
                     inputContainerStyle={{height:50, margin:30}}
                     value={password}
                     onChangeText={ setPassword }
@@ -129,7 +112,7 @@ const SignInScreen = ({ navigation }) => {
                     buttonStyle={{ margin: 10, marginTop: 0, height: 100,borderRadius: 10, backgroundColor:'#000000'  }}
                     color="#808080"
                     title="Entrar"
-                    onPress={() =>  {signIn()}  }
+                    onPress={() =>  { signIn()}  }
                 />
             </Card>
         </View>
