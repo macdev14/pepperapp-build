@@ -28,7 +28,7 @@ import {
 
 const SignInScreen = ({ navigation }) => {
     const { LogIn } = React.useContext(UserContext);
-    //const url = 'http://localhost:8000/api/app/api/login';
+    //const url = 'http://app.inprocesses.io0/api/app/api/login';
     const [user, setUser] = useState('');
     const [password, setPassword] = useState('');
     const [SignUpErrors, setSignUpErrors] = useState({});
@@ -56,7 +56,7 @@ const SignInScreen = ({ navigation }) => {
 
     function signIn(){
        
-       return (api.post('api/app/api/login', { username: user, password: password} ).then((res)=>{
+       return (api.post('api/login/', { username: user, password: password} ).then((res)=>{
             console.log(res.data)  
             if (res.data.access){
                 console.log("ID FUNCIONARIO: "+res.data.id_func)
@@ -85,22 +85,22 @@ const SignInScreen = ({ navigation }) => {
 
 <View>
         
-         <Text style={{height:50, margin:55, marginBottom:0 ,fontSize:20, marginTop:30, color: '#000'}}> Pimentel Ferramentas</Text>
+         <Text style={{height:50, margin:55, marginBottom:40 ,fontSize:40, marginTop:30, color: '#000'}}> InProcesses</Text>
             <Card borderRadius={10}>
                 <Input
                     autoCapitalize="none"
                     label={''}
-                    inputStyle={{height:50, fontSize:20,}}
+                    inputStyle={{height:50, fontSize:40,}}
                     inputContainerStyle={{height:50, margin:30}}
-                    placeholder="Usuário"
+                    placeholder="Username"
                     value={user}
                     onChangeText={ setUser }
                     errorStyle={{ color: '#DC143C' }}
                     errorMessage={SignUpErrors ? SignUpErrors.username : null}
                 />
                 <Input
-                    placeholder="Senha"
-                    inputStyle={{height:50, fontSize:20}}
+                    placeholder="Password"
+                    inputStyle={{height:50, fontSize:40}}
                     inputContainerStyle={{height:50, margin:30}}
                     value={password}
                     onChangeText={ setPassword }
@@ -109,7 +109,7 @@ const SignInScreen = ({ navigation }) => {
                     errorMessage={SignUpErrors ? SignUpErrors.password : null}
                 />
                 <Button
-                    buttonStyle={{ margin: 10, marginTop: 0, height: 100,borderRadius: 10, backgroundColor:'#000000'  }}
+                    buttonStyle={{ fontSize:40, margin: 10, marginTop: 0, height: 50,borderRadius: 10, backgroundColor:'#009e3f'  }}
                     color="#808080"
                     title="Entrar"
                     onPress={() =>  { signIn()}  }

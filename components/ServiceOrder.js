@@ -37,7 +37,7 @@ export function ServiceOrder({navigation}){
   let token_local = await AsyncStorage.getItem('token')
   const {refresh, user_id} = JSON.parse(token_local)
   //console.log("object token: " + refresh )
-   api.post('api/token/refresh/', { refresh : refresh } ).then( (res) => {
+   api.post('api/refresh/', { refresh : refresh } ).then( (res) => {
     const store = { 
       token : res.data.access,
       refresh : refresh,
@@ -45,7 +45,7 @@ export function ServiceOrder({navigation}){
     }
     //console.log("token refresh "+ refresh )
     AsyncStorage.setItem('token', JSON.stringify(store));
-    api.get('api/osuserhist/?fim=""', { headers: { 'Authorization':  'Bearer ' + res.data.access } } ) .then(responseJson => {
+    api.get('api/osuserhist/?end=""', { headers: { 'Authorization':  'Bearer ' + res.data.access } } ) .then(responseJson => {
       if (responseJson.messages){throw "Sessão Expirada"}
      
       setData(responseJson.data)
@@ -103,14 +103,14 @@ return
      {(Array.isArray(data))?(data.map((obj, i)=>(
        <Card borderRadius={10} style={{ textAlign:"left" }} key={i}>
        <Card.Title style={{ fontFamily:'Arial', color:"black", fontSize:25, textAlign:"left"  }}>
-         <Text> O.S: {obj['os']['Numero_Os']}</Text>  {"\n"} <Text> Prazo: {reformatDate(obj.os.Prazo)} </Text>
+         <Text> O.S: {obj['subserviceorder']['number']}</Text>  {"\n"} <Text> Prazo: {reformatDate(obj.subserviceorder.due_date)} </Text>
           </Card.Title>
           
           <Card.FeaturedTitle>
           {(obj.fim)?(  
           <Badge badgeStyle={Style.badgeStyle} status="success" value={<Text style={Style.badgeText}>
           {(obj.colaborador == user_id )?( obj.fim ) : 'Finalizado'}</Text>} />):
-          ( <Badge badgeStyle={Style.badgeStyle} status="error" value={<Text style={Style.badgeText}>{obj.inicio}</Text>}/>)}
+          ( <Badge badgeStyle={Style.badgeStyle} status="error" value={<Text style={Style.badgeText}>{ String(obj.start).split('.')[0] }</Text>}/>)}
           
           </Card.FeaturedTitle>
           

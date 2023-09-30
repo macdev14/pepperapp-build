@@ -48,8 +48,11 @@ class Processes extends React.Component{
   
     const refreshLogin = async() =>{
       const token = await AsyncStorage.getItem('token') ?? this.context.signOut()
+      try {
+        
+      
       const tok = JSON.parse(token)
-      api.post('api/token/refresh/', { refresh : tok.refresh} ).then( (res) => {
+      api.post('api/refresh/', { refresh : tok.refresh} ).then( (res) => {
         const store = { 
           token : res.data.access,
           refresh : tok.refresh,
@@ -57,7 +60,7 @@ class Processes extends React.Component{
         }
         //console.log("token refresh "+ tok.refresh )
        //
-       api.get('api/processos/', { headers: { 'Authorization':  'Bearer ' + res.data.access } } ) .then(responseJson => {
+       api.get('api/process/', { headers: { 'Authorization':  'Bearer ' + res.data.access } } ) .then(responseJson => {
        // if (responseJson.messages){console.log(responseJson.messages); throw "Sessão Expirada"}
         //console.log(responseJson.data)
         return this.setState(
@@ -78,7 +81,9 @@ class Processes extends React.Component{
         //console.log(err); 
          return this.context.signOut()} )
 
-     
+        } catch (error) {
+          this.context.signOut()
+        }
 
     }
   
@@ -117,8 +122,8 @@ return (
                 {that.state.Processes.map(function(object, i){
         return  <Button
                     buttonStyle={{ margin: 10, marginTop: 50, marginBottom:50,height: 100, backgroundColor: '#000000'}}
-                    title={object.procname}
-                    onPress={()=>  that.props.navigation.navigate('Selecione', {idProc: object.id, nome: object.procname}) } key={i}
+                    title={object.name}
+                    onPress={()=>  that.props.navigation.navigate('Selecione', {idProc: object.id, nome: object.name}) } key={i}
                 />
     })}
                

@@ -53,7 +53,7 @@ useEffect(() => {
         } catch (error) {
           return
         }
-        ((qtd=='') && (timeTypeOpt == "inicio")) ? (alert('Alterar Quantidade')) : ( setQtd(parseInt(qtd)) );
+        ((qtd=='') && (timeTypeOpt == "start")) ? (alert('Alterar Quantidade')) : ( setQtd(parseInt(qtd)) );
         var options = { hour12: false };
         let curTime = new Date().toLocaleTimeString('pt-BR', options);
         console.log("DATA START") 
@@ -63,15 +63,15 @@ useEffect(() => {
         console.log(curTime);
         console.log(userId);
         console.log("DATA END") 
-        const data =  { os: osid, processo: idProc, qtd: qtd, [timeTypeOpt]: curTime, ocorrencias: ocorrencia }
+        const data =  { subserviceorder: osid, process: idProc, qtd: qtd, [timeTypeOpt]: curTime, incidents: ocorrencia }
         console.log(data);
         const headers =  { headers: { 'Authorization':  `Bearer  ${Token}` } }
-        return (api.post('api/historico_os/',  data, headers  ).then((res)=>{
+        return (api.post('api/inprocess/',  data, headers  ).then((res)=>{
                console.log(res.data)
                if (res.data.non_field_errors){
                  alert(res.data.non_field_errors)
                }
-               (timeTypeOpt == 'fim') ? alert("O.S finalizada") : alert("O.S iniciada") 
+               (timeTypeOpt == 'end') ? alert("O.S finalizada") : alert("O.S iniciada") 
                
                navigation.navigate('Processes');
            }
@@ -82,7 +82,7 @@ useEffect(() => {
     function confirm() {
         Alert.alert(
   'Confirmar ',
-  ((timeType == 'fim')? 'Confirmar Ocorrência':'Confirmar Quantidade'),
+  ((timeType == 'end')? 'Confirmar Ocorrência':'Confirmar Quantidade'),
   [ 
     {
       text: 'Cancelar',

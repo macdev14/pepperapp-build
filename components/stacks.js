@@ -6,8 +6,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createBottomTabNavigator, BottomTabBar } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { ServiceOrder } from './ServiceOrder';
-import qrStart from "./qrStart";
-import qrEnd from "./qrEnd";
+import QrStart from "./QrStart";
+import QrEnd from "./QrEnd";
 import api from "./api";
 import SignInScreen from './LoginScreen';
 import Processes from "./Processes";
@@ -30,9 +30,10 @@ const getHeaderTitle = (route) => {
     const routeName = getFocusedRouteNameFromRoute(route);
     //console.log(route.name)
     
-    if (routeName != 'StackTabs'){
-    switch (routeName) {
     
+    switch (routeName) {
+      case 'StackTabs':
+        return 'Processos';
       case 'Processos':
         return 'Processos';
       case 'Processo':
@@ -42,7 +43,7 @@ const getHeaderTitle = (route) => {
       case 'Redirect':
         return 'Redirect';
     }
-  };
+  
 }
 
 function PontoRegisterStackNav(){
@@ -112,7 +113,7 @@ export function PontoTabsNavigator() {
   }
   
   export function RootStack({navigation}){
-    return(<MainStack.Navigator screenOptions={{ headerShown: false }}>
+    return(<MainStack.Navigator screenOptions={{ headerShown: true }}>
       <MainStack.Screen component={TabStackNavigator} name="StackTabs"
       options={({route}) => ({
         headerTitle: getHeaderTitle(route),
@@ -150,23 +151,23 @@ export function PontoTabsNavigator() {
           <Stack.Screen name='Qtd' component={Qtd} options={{title: 'Quantidade', headerTintColor: '#fff',headerStyle: {
            backgroundColor: '#000'
         }, cardStyle: {
-                  backgroundColor: '#e0e0e0'
+                  backgroundColor: '#fff'
               } }}/>
   
-          <Stack.Screen name='Início' component={qrStart} options={{title: 'Início',  headerTintColor: '#fff',headerStyle: {
+          <Stack.Screen name='Início' component={QrStart} options={{title: 'Início',  headerTintColor: '#fff',headerStyle: {
            backgroundColor: '#000'
         }, cardStyle: {
                   backgroundColor: '#e0e0e0'
               } }} />
-           <Stack.Screen name='Fim' component={qrEnd} options={{title: 'Fim',  headerTintColor: '#fff',headerStyle: {
+           <Stack.Screen name='Fim' component={QrEnd} options={{title: 'Fim',  headerTintColor: '#fff',headerStyle: {
            backgroundColor: '#000'
         }, cardStyle: {
                   backgroundColor: '#e0e0e0'
               } }}/>
            <Stack.Screen name='Processes' component={Processes} options={{title: 'Processos', headerLeft:null,  headerTintColor: '#fff',headerStyle: {
-           backgroundColor: '#000'
+           backgroundColor: '#e0e0e0'
         }, cardStyle: {
-                  backgroundColor: '#e0e0e0'
+                  backgroundColor: '#fff'
               } }}/>
             <Stack.Screen name='Selecione' component={Time} options={{title: 'Selecione',  headerTintColor: '#fff',headerStyle: {
            backgroundColor: '#000'
@@ -183,7 +184,7 @@ export function PontoTabsNavigator() {
       <Stack.Screen name='Login' component={SignInScreen} options={{ headerLeft:null,  headerTintColor: '#fff',headerStyle: {
        backgroundColor: '#000'
     }, cardStyle: {
-              backgroundColor: '#e0e0e0'
+              backgroundColor: '#fff'
           } }}/>
         </Stack.Navigator>
     )
@@ -206,7 +207,7 @@ export function PontoTabsNavigator() {
       {userToken ? (
         <RootStackNav.Screen
           name="App"
-          component={DrawerStack}
+          component={RootStack}
           userToken={userToken}
           options={{
             animationEnabled: false

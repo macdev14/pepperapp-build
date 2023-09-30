@@ -104,7 +104,7 @@ export default function App() {
       setFuncId(token['user_id'])
       setUserToken(token['token'])
       const allproc = await api.get('api/processos/', { headers: { 'Authorization':  'Bearer ' + token.token } } ) .then().catch(err => {
-        api.post('api/token/refresh/', { refresh : token.refresh} ).then( (res) => {
+        api.post('api/refresh/', { refresh : token.refresh} ).then( (res) => {
           const store = { 
             token : res.data.access,
             refresh :token.refresh,

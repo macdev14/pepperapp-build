@@ -12,7 +12,7 @@ import {
 } from 'react-native-elements';
 
 
-export default function qrStart({ route, navigation }) {
+export default function QrStart({ route, navigation }) {
   const context = useContext(UserContext)
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
@@ -56,8 +56,8 @@ export default function qrStart({ route, navigation }) {
     //console.log(Token)
     //console.log(data)
     let id = data
-     if (id.includes('http') && id.includes('.com')) {
- return navigation.navigate('Qtd', {idProc: idProc, osid: id, userID: userId, timeType: 'inicio'})
+     if (id.includes('http') && (id.includes('.com') || id.includes('.io')  ) ) {
+ return navigation.navigate('Qtd', {idProc: idProc, osid: id, userID: userId, timeType: 'start'})
  }
       
       else{

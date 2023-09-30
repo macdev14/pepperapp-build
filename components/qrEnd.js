@@ -12,7 +12,7 @@ import {
 } from 'react-native-elements';
 
 
-export default function qrEnd({ route, navigation }) {
+export default function QrEnd({ route, navigation }) {
   const context = useContext(UserContext)
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
@@ -52,7 +52,7 @@ export default function qrEnd({ route, navigation }) {
     let curTime = new Date().toLocaleTimeString('pt-BR', options)
     let id = data;
     
-    (data.includes('http') && data.includes('.com')) ? (navigation.navigate('Qtd', {idProc: idProc, osid: id, timeType: 'fim'}))  : (alert('Ordem de Serviço inválida'))
+    (data.includes('http') && (data.includes('.com') || data.includes('.io') )  ) ? (navigation.navigate('Qtd', {idProc: idProc, osid: id, timeType: 'end'}))  : (alert('Ordem de Serviço inválida'))
       
     /*(api.post('api/processos/fim', { osid: [{url : id}] , idProc: idProc, horario: curTime, ocorrencias : ocorrencia}, { headers: { 'Authorization':  `${Token}` } } ).then((res)=>{
          
